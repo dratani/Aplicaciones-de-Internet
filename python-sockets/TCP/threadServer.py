@@ -1,39 +1,63 @@
+# !/usr/bin/env python3
 
-#!/usr/bin/env python3
+import socket
+import sys
+import threading
 
-import sys,threading,socket
-def aceptarConexion(socketTCP,listaConexiones):
-    while True:
-        client_conn, client_addr = socketTCP.accept()
-        print("Conectado a", client_addr)
-        listaConexiones.append(client_conn)
-        thread_read = threading.Thread(target=recibirDatos, args=[client_conn,client_addr])
-        thread_read.start()
 
-def recibirDatos(conn,addr):
-        with conn:
-            while True:
-                print("Esperando a recibir datos... ")
-                data = conn.recv(1024)
-                print ("Recibido,", data,"   de ", addr)
-                if not data or data=="end":
-                    print("Fin")
-                    break
-                print("Enviando respuesta a", addr)
-                conn.sendall(data)
+def servirPorSiempre(socketTcp, listaconexiones):
+    try:
+        while True:
+            client_conn, client_addr = socketTcp.accept()
+            print("Conectado a", client_addr)
+            listaconexiones.append(client_conn)
+            thread_read = threading.Thread(target=recibir_datos, args=[client_conn, client_addr])
+            thread_read.start()
+            gestion_conexiones(listaConexiones)
+    except Exception as e:
+        print(e)
 
-listaConexiones=[]
+def gestion_conexiones(listaconexiones):
+    for conn in listaconexiones:
+        if conn.fileno() == -1:
+            listaconexiones.remove(conn)
+    print("hilos activos:", threading.active_count())
+    print("enum", threading.enumerate())
+    print("conexiones: ", len(listaconexiones))
+    print(listaconexiones)
+
+
+def recibir_datos(conn, addr):
+    try:
+        cur_thread = threading.current_thread()
+        print("Recibiendo datos del cliente {} en el {}".format(addr, cur_thread.name))
+        while True:
+            data = conn.recv(1024)
+            response = bytes("{}: {}".format(cur_thread.name, data), 'ascii')
+            if not data:
+                print("Fin")
+                break
+            conn.sendall(response)
+    except Exception as e:
+        print(e)
+    finally:
+        conn.close()
+
+
+
+listaConexiones = []
 host, port, numConn = sys.argv[1:4]
 
 if len(sys.argv) != 4:
     print("usage:", sys.argv[0], "<host> <port> <num_connections>")
     sys.exit(1)
 
+serveraddr = (host, int(port))
+
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as TCPServerSocket:
-    serveraddr=(host,int(port))
+    TCPServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     TCPServerSocket.bind(serveraddr)
     TCPServerSocket.listen(int(numConn))
     print("El servidor TCP está disponible y en espera de solicitudes")
-    thread_acept = threading.Thread(target = aceptarConexion,args=[TCPServerSocket,listaConexiones])
-    thread_acept.start()
-    print("sigue")
+
+    servirPorSiempre(TCPServerSocket, listaConexiones)
