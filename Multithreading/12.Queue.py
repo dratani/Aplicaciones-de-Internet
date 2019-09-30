@@ -1,60 +1,44 @@
-
-import queue
 import threading
+import time
+import queue
+import logging
 
-# este thread se bloquea esperando que venga algo en la cola,
-# lo unico que hace es imprimirlo. Si el mensaje es quit finaliza
-class Reader(threading.Thread):
-   def __init__(self, in_queue):
-       threading.Thread.__init__(self)
-       self.in_queue = in_queue
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s (%(threadName)-2s) %(message)s')
 
-   def run(self):
-       while True:
-           msg = self.in_queue.get()
-           if msg == 'quit':
-               print ('reader se va!')
-               break
+def consume(q):
+    while (True):
 
-           print ('leido ' + msg)
+        item = q.get();
+        logging.debug("Consume el elemento %s de cola %d",item, q.qsize())
+        time.sleep(3)  # spend 3 seconds to process or consume the tiem
+        logging.debug("Termina el proceso. cola %d",q.qsize())
+        q.task_done()
 
-# este thread se bloquea esperando que venga algo en la cola de entrada,
-# cuando llega algo lo escribe al reves en la cola de salida.
-class Writer(threading.Thread):
-   def __init__(self, in_queue, out_queue):
-       threading.Thread.__init__(self)
-       self.in_queue = in_queue
-       self.out_queue = out_queue
 
-   def run(self):
-       while True:
-           msg = self.in_queue.get()
-           if msg == 'quit':
-               print ('writer se va!')
-               self.out_queue.put(msg)
-               break
+def producer(q):
+    # the main thread will put new items to the queue
 
-           print ('escrito ' + msg)
+    for i in range(10):
+        name = threading.currentThread().getName()
+        logging.debug("Inicia producción de elementos en la cola de tamaño %d",q.qsize())
+        item = "Elemento-" + str(i)
+        q.put(item)
+        logging.debug("Producción exitosa del item %s en la cola de tamaño %d",item,q.qsize())
 
-           self.out_queue.put(msg[::-1])
+    q.join()
 
-# aca creo un lector y un escritor, le doy de salida a writer la
-# entrada de reader, por lo tanto lo que escriba writer lo va a
-# leer reader al reves el recorrido es asi:
-# mensaje -> entra a writer -> lo invierte -> lo envia a la salida -> entra a reader
-def test():
-   in_queue =  queue.Queue()
-   out_queue =  queue.Queue()
-   reader = Reader(out_queue)
-   writer = Writer(in_queue, out_queue)
-
-   reader.start()
-   writer.start()
-
-   in_queue.put('buenas')
-   in_queue.put('como va')
-   in_queue.put('quit')
 
 if __name__ == '__main__':
-   test()
+    q = queue.Queue(maxsize=3)
 
+    threads_num = 3  # three threads to consume
+    for i in range(threads_num):
+        t = threading.Thread(name="Consumer-" + str(i), target=consume, args=(q,))
+        t.start()
+
+    # 1 thread to procuce
+    t = threading.Thread(name="Producer", target=producer, args=(q,))
+    t.start()
+
+    q.join()
