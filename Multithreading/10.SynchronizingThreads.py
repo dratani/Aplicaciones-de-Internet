@@ -5,7 +5,6 @@ import time
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s (%(threadName)-2s) %(message)s',
                     )
-
 def consumer(cond):
     """wait for the condition and use the resource"""
     logging.debug('Iniciando hilo consumidor')

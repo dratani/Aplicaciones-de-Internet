@@ -6,7 +6,6 @@ import time
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s (%(threadName)-2s) %(message)s',
                     )
-
 class ActivePool(object):
     def __init__(self):
         super(ActivePool, self).__init__()

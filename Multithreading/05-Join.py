@@ -5,7 +5,6 @@ import time
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-10s) %(message)s',
                     )
-
 def wait_for_event(e):
     """Wait for the event to be set before doing anything"""
     logging.debug('Esperando por evento inicio')

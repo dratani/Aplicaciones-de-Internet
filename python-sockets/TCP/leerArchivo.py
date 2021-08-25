@@ -1,4 +1,4 @@
-#Ejemplo lectura archivos
+#Ejemplo lectura archivo
 import time
 archivo = open("../../libros/Bibla.txt", "r")
 for linea in archivo.readlines():

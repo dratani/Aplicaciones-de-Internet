@@ -5,7 +5,6 @@ logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-10s) %(message)s',
                     )
 
-
 def worker_with(lock):
     with lock:
         logging.debug('Bloqueo adquirido vía with')

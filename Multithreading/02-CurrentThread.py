@@ -1,6 +1,7 @@
 import threading
 import time
 
+
 def worker():
     print (threading.currentThread().getName(), 'Iniciando')
     time.sleep(2)

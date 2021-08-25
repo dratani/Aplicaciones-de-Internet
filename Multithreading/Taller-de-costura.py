@@ -5,7 +5,6 @@ import time
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-2s) %(message)s')
 
-
 class Taller(object):
     def __init__(self, start=0):
         self.condicionMangasMAX = threading.Condition()

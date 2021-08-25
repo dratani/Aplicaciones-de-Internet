@@ -1,7 +1,7 @@
 import threading
 
 def worker(num):
-    """thread worker function"""
+    """hilo función trabajador"""
     print ('Trabajador',num)
     return
 

@@ -2,7 +2,6 @@ import logging
 import threading
 import time
 
-
 def lock_holder(lock):
     logging.debug('Iniciando')
     while True:

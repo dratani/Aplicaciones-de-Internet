@@ -8,7 +8,6 @@ def worker(barrier):
     worker_id = barrier.wait()
     print(threading.current_thread().name, 'Después de la barrera', worker_id)
 
-
 NUM_THREADS = 3
 
 barrier = threading.Barrier(NUM_THREADS)
