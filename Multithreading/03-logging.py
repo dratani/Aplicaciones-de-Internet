@@ -5,7 +5,6 @@ import time
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(levelname)s] (%(threadName)-10s) %(message)s',
                     )
-
 def worker():
     logging.debug('Iniciando')
     time.sleep(2)

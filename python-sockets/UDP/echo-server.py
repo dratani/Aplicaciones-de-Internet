@@ -1,23 +1,24 @@
 import socket
-HOST = "127.0.0.1"  # The server's hostname or IP address
-PORT = 54321  # The port used by the server
+
+HOST = "127.0.0.1"  # El hostname o IP del servidor
+PORT = 54321  # El puerto que usa el servidor
 bufferSize = 1024
-msgFromServer = "Hello UDP Client"
+msgFromServer = "Hola cliente UDP"
 bytesToSend = str.encode(msgFromServer)
 
-with  socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as UDPServerSocket:
+with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as UDPServerSocket:
     UDPServerSocket.bind((HOST, PORT))
 
-    print("UDP server up and listening")
+    print("Servidor UDP activo, esperando peticiones")
     # Listen for incoming datagrams
-    msgFromServer = "Hello UDP Client"
+    msgFromServer = "Hola cliente UDP"
 
     bytesToSend = str.encode(msgFromServer)
     while (True):
-        data,address = UDPServerSocket.recvfrom(bufferSize)
+        data, address = UDPServerSocket.recvfrom(bufferSize)
 
-        print("Message from Client:{}".format(data))
-        print("Client IP Address:{}".format(address))
+        print("Mensaje del cliente:{}".format(data))
+        print("Ip del cliente:{}".format(address))
 
-        # Sending a reply to client
+        # Enviando una respuesta al cliente
         UDPServerSocket.sendto(bytesToSend, address)

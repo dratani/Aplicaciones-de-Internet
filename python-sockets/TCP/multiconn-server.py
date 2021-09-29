@@ -4,31 +4,35 @@ import sys
 import socket
 import selectors
 import types
-#
+import logging
 sel = selectors.DefaultSelector()
 
-def accept(sock, mask):
-    conn, addr = sock.accept()  # Should be ready
-    print('accepted', conn, 'from', addr)
-    conn.setblocking(False)
-    sel.register(conn, selectors.EVENT_READ, read)
+def accept(sock_a, mask):
+    sock_conn, addr = sock_a.accept()  # Should be ready
+    print('aceptado', sock_conn, ' de', addr)
+    sock_conn.setblocking(False)
+    sel.register(sock_conn, selectors.EVENT_READ | selectors.EVENT_WRITE, read_write)
+    #sel.register(sock_conn,selectors.EVENT_WRITE, read_write)
 
-def read(conn, mask):
-    data = conn.recv(1000)  # Should be ready
-    if data:
-        print('echoing', repr(data), 'to', conn)
-        conn.send(data)  # Hope it won't block
-    else:
-        print('closing', conn)
-        sel.unregister(conn)
-        conn.close()
+def read_write(sock_c, mask):
+    if mask & selectors.EVENT_READ:
+        data = sock_c.recv(1024)  # Should be ready
+        if data:
+            print('recibido', repr(data), 'a', sock_c)
+            print('respondiendo', repr(data), 'a', sock_c)
+            sock_c.sendall(data)  # Hope it won't block
+        else:
+            print('cerrando', sock_c)
+            sel.unregister(sock_c)
+            sock_c.close()
+    if mask & selectors.EVENT_WRITE:
+        print ("enviando datos")
 
-with socket.socket() as sock:
-    sock.bind(('localhost', 1234))
-    sock.listen(100)
-    sock.setblocking(False)
-    sel.register(sock, selectors.EVENT_READ, accept)
-
+with socket.socket() as sock_accept:
+    sock_accept.bind(('localhost', 12345))
+    sock_accept.listen(100)
+    sock_accept.setblocking(False)
+    sel.register(sock_accept, selectors.EVENT_READ, accept)
     while True:
         print("Esperando evento...")
         events = sel.select()

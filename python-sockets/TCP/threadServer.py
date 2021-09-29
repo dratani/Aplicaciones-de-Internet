@@ -35,7 +35,7 @@ def recibir_datos(conn, addr):
             data = conn.recv(1024)
             response = bytes("{}: {}".format(cur_thread.name, data), 'ascii')
             if not data:
-                print("Fin")
+                print("Fin.")
                 break
             conn.sendall(response)
     except Exception as e:

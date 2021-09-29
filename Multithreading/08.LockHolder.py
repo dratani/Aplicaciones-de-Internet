@@ -27,10 +27,10 @@ def worker(lock):
         try:
             num_tries += 1
             if have_it:
-                logging.debug('Intento %d: Abierto, puedo entrar',num_tries)
+                logging.debug('Intento %d: Abierto, puedo entrar', num_tries)
                 num_acquires += 1
             else:
-                logging.debug('Intento %d: Cerrado, sigue intentando',num_tries)
+                logging.debug('Intento %d: Cerrado, sigue intentando', num_tries)
         finally:
             if have_it:
                 lock.release()
@@ -44,8 +44,8 @@ logging.basicConfig(
 
 lock = threading.Lock()
 
-holder = threading.Thread(target=lock_holder,args=(lock,), name='LockHolder', daemon=True,)
+holder = threading.Thread(target=lock_holder, args=(lock,), name='LockHolder', daemon=True, )
 holder.start()
 
-worker = threading.Thread(target=worker, args=(lock,), name='Worker',)
+worker = threading.Thread(target=worker, args=(lock,), name='Worker', )
 worker.start()

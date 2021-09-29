@@ -5,7 +5,6 @@ import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-10s) %(message)s',
                     )
-
 def daemon():
     logging.debug('Iniciando')
     time.sleep(2)
@@ -23,5 +22,5 @@ t = threading.Thread(name='non-daemon', target=non_daemon)
 d.start()
 t.start()
 
-#d.join()
-#t.join()
+d.join()
+t.join()
