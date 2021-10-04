@@ -6,19 +6,24 @@ import time
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s (%(threadName)-2s) %(message)s',
                     )
+
+
 class ActivePool(object):
     def __init__(self):
         super(ActivePool, self).__init__()
         self.active = []
         self.lock = threading.Lock()
+
     def makeActive(self, name):
         with self.lock:
             self.active.append(name)
             logging.debug('Ejecutando: %s', self.active)
+
     def makeInactive(self, name):
         with self.lock:
             self.active.remove(name)
             logging.debug('Ejecutando: %s', self.active)
+
 
 def worker(s, pool):
     logging.debug('Esperando para acceder al grupo/parque/agrupación/reserva')
@@ -27,6 +32,7 @@ def worker(s, pool):
         pool.makeActive(name)
         time.sleep(0.1)
         pool.makeInactive(name)
+
 
 pool = ActivePool()
 s = threading.Semaphore(2)

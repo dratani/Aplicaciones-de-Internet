@@ -6,6 +6,8 @@ import time
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-10s) %(message)s',
                     )
+
+
 class Counter(object):
     def __init__(self, start=0):
         self.lock = threading.Lock()
