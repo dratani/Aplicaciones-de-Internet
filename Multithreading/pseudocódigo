@@ -1,0 +1,19 @@
+#productor
+
+#revisa el estatus del buffer,
+    si el buffer no está lleno
+        #notificar a los productores que el buffer no está lleno ( pueden continuar produciendo)
+        #producir
+            Agrega uno al buffer
+            notifica a los consumidores que pueden iniciar
+     Si el buffer está lleno
+        #Esperar a que algún productor avise que hay espacio en el buffer
+
+#consumidor
+
+#revisa el estatus del buffer
+    si el buffer no esá vacío
+        #consumir
+            Retira uno del buffer
+    si el buffer está vacío
+        Espera a que algún productor le avise que hay recurso disponible
