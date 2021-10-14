@@ -1,7 +1,10 @@
 import logging
 import threading
 import time
-
+#Agregar el buffer finito (10 elementos)
+#Agregar condición de parada del productor
+#Agregar condición de consumo
+#Agregar producción y el consumo (manipulación de buffer)
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s (%(threadName)-2s) %(message)s',
                     )
@@ -10,8 +13,9 @@ logging.basicConfig(level=logging.DEBUG,
 def consumer(cond):
     """wait for the condition and use the resource"""
     logging.debug('Iniciando hilo consumidor')
-    t = threading.currentThread()
+    #t = threading.currentThread()
     with cond:
+        #sección critica
         cond.wait()
         logging.debug('El recurso está disponible para el consumidor')
 
