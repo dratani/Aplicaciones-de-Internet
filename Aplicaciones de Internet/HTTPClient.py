@@ -1,10 +1,10 @@
 #HTTPCLient
 import argparse
 import http.client
-REMOTE_SERVER_HOST = 'www.python.org'
+REMOTE_SERVER_HOST = '127.0.0.1:8000'
 REMOTE_SERVER_PATH = '/'
 
-conn = http.client.HTTPSConnection(REMOTE_SERVER_HOST)
+conn = http.client.HTTPConnection(REMOTE_SERVER_HOST)
 conn.request("GET", "/")
 
 r1 = conn.getresponse()
