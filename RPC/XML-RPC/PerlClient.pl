@@ -1,3 +1,6 @@
+use strict;
+use warnings FATAL => 'all';
+use warnings;
 use Frontier::Client;
 
 # Crear un objeto para representar el servidor XML-RPC

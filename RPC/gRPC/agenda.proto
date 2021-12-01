@@ -1,0 +1,23 @@
+syntax = "proto2";
+package ejemplo1;
+message Persona{
+    optional string nombre =1;
+    optional int32 id = 2;
+    optional string email =3;
+
+    enum TipoDeTelefono{
+        MOVIL =0;
+        CASA = 1;
+        TRABAJO = 2;
+    }
+
+    message NumeroDeTelefono {
+        optional string numero =1;
+        optional TipoDeTelefono tipo = 2 [default=CASA];
+    }
+    repeated NumeroDeTelefono telefonos=4;
+}
+
+message Agenda {
+    repeated Persona alguien =1;
+}
