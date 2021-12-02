@@ -1,0 +1,17 @@
+syntax = "proto3";
+package holaMundoRPC;
+// definición del servicio saludos
+
+service Saludos {
+  // Envía un saludo
+  rpc DecirHola (SolicitudSaludo) returns (RespuestaSaludo) {}
+}
+// El mensaje de solicitud contiene el nombre del usuario
+message SolicitudSaludo {
+  string nombre = 1;
+}
+
+//El mensaje de respuesta contiene el saludo
+message RespuestaSaludo {
+  string saludo = 1;
+}
