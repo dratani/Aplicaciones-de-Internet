@@ -22,14 +22,46 @@ import saludos_pb2
 import saludos_pb2_grpc
 
 
+def RPCSimple(stub):
+    response = stub.DecirHola(saludos_pb2.SolicitudSaludo(nombre='Tani'))
+    print("Respuesta de saludo recibida: " + response.saludo)
+
+
+def generarSaludosIterator():
+    listaDeAmigos = ["Juan Carlos", "Lupita", "Gabriela", "Nayeli", "Angel"]
+    for item in listaDeAmigos:
+        saludo = saludos_pb2.SolicitudSaludo(nombre=item)
+        yield saludo
+
+def RPCResponseStream (stub):
+    listaDeAmigos = ["Juan Carlos", "Lupita", "Gabriela", "Nayeli", "Angel"]
+    for respuesta in stub.HolaEnVariosIdiomas(saludos_pb2.SolicitudSaludo(nombre='Tani')):
+        print("Respuesta stream:" + respuesta.saludo)
+
+def RPCRequestStream(stub):
+    response = stub.SaludaAMisAmigos(generarSaludosIterator())
+    print("Petición stream, total de mensajes recibidos: " + str(response.contador_nombres)
+                                 + " Mensaje concatenado: " + response.saludo)
+def RPCBidireccional(stub):
+    for respuesta in stub.SaludaAMisAmigosEnVariosIdiomas (generarSaludosIterator()):
+        print("Respuesta bidireccional:" + respuesta.saludo)
 def run():
+
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = saludos_pb2_grpc.SaludosStub(channel)
-        response = stub.DecirHola(saludos_pb2.SolicitudSaludo(nombre='Tani'))
-    print("Solicitud de saludo recibida: " + response.saludo)
+
+        #LLamada a RPC simple
+        RPCSimple(stub)
+        #Llamada a RCP con respuesta tipo transmisión
+        RPCResponseStream(stub)
+        #Llamada a RPC con solicitud tipo transmisión
+        RPCRequestStream(stub)
+        #Llamada a RPC con solicitud y respuesta de tipo transmisión (bidireccional)
+        RPCBidireccional(stub)
+
 
 
 if __name__ == '__main__':

@@ -1,10 +1,29 @@
 syntax = "proto3";
 package holaMundoRPC;
 // definición del servicio saludos
-
 service Saludos {
-  // Envía un saludo
+   //UN RPC simple
+   //
+  // Envía un saludo usando un rpc sencillo
+  //
   rpc DecirHola (SolicitudSaludo) returns (RespuestaSaludo) {}
+
+  //Un RPC con respuesta tipo transmisión.
+  //
+  // Recibe una solicitud de saludo y envía una secuencia de mensajes en varios idiomas
+  //
+  rpc HolaEnVariosIdiomas (SolicitudSaludo) returns (stream RespuestaSaludo) {}
+  //
+  //Un RPC con solicitud tipo transmisión.
+  //
+  //Acepta un flujo de datos de tipo saludo y regresa un resumen.
+  rpc SaludaAMisAmigos (stream SolicitudSaludo)  returns ( ResumenSaludos) {}
+
+  //Un RPC con transmisión bidireccional
+  //
+  //Acepta un flujo de datos de tipo saludo y envía una secuencia de mensajes del saludo en varios idiomas
+  rpc SaludaAMisAmigosEnVariosIdiomas (stream SolicitudSaludo) returns (stream RespuestaSaludo) {}
+
 }
 // El mensaje de solicitud contiene el nombre del usuario
 message SolicitudSaludo {
@@ -14,4 +33,11 @@ message SolicitudSaludo {
 //El mensaje de respuesta contiene el saludo
 message RespuestaSaludo {
   string saludo = 1;
+}
+//El mensaje contiene el resumen de la lista de saludos recibida
+message ResumenSaludos{
+    //cuenta el número de nombres que se han recibido
+    int32 contador_nombres =1;
+    //cadena de respuesta con el saludo correspondiente
+    string saludo =2;
 }

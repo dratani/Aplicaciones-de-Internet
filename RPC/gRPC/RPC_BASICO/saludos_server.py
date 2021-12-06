@@ -20,11 +20,30 @@ import grpc
 import saludos_pb2
 import saludos_pb2_grpc
 
+listaSaludos = ["Hello", "Salut", "Hallo", "Hola", "Merhaba"]
+
 
 class Saludos(saludos_pb2_grpc.SaludosServicer):
 
     def DecirHola(self, request, context):
         return saludos_pb2.RespuestaSaludo(saludo='Hola, %s!' % request.nombre)
+
+    def HolaEnVariosIdiomas(self, request, context):
+        for idiom in listaSaludos:
+            yield saludos_pb2.RespuestaSaludo(saludo=idiom + ', %s!' % request.nombre)
+
+    def SaludaAMisAmigos(self, request_iterator, context):
+        contador = 0
+        saludos = "Hola"
+        for request in request_iterator:
+            contador += 1
+            saludos += " ," + request.nombre
+        return saludos_pb2.ResumenSaludos(contador_nombres=contador, saludo=saludos)
+
+    def SaludaAMisAmigosEnVariosIdiomas(self, request_iterator, context):
+        for request in request_iterator:
+            for idiom in listaSaludos:
+                yield saludos_pb2.RespuestaSaludo(saludo=idiom + ', %s!' % request.nombre)
 
 
 def serve():
