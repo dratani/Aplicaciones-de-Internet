@@ -17,25 +17,27 @@ class ActivePool(object):
     def makeActive(self, name):
         with self.lock:
             self.active.append(name)
-            logging.debug('Ejecutando: %s', self.active)
+            logging.debug('Ejecutando append: %s', self.active)
 
     def makeInactive(self, name):
         with self.lock:
             self.active.remove(name)
-            logging.debug('Ejecutando: %s', self.active)
+            logging.debug('Ejecutando remove: %s', self.active)
 
 
 def worker(s, pool):
-    logging.debug('Esperando para acceder al grupo/parque/agrupación/reserva')
+    logging.debug('Esperando para acceder al grupo ')
     with s:
+        logging.debug("Adquirí el semáforo")
         name = threading.currentThread().getName()
         pool.makeActive(name)
         time.sleep(0.1)
         pool.makeInactive(name)
+        logging.debug("Haciendo el release del semáforo")
 
 
 pool = ActivePool()
-s = threading.Semaphore(2)
+s = threading.Semaphore(3)
 for i in range(4):
     t = threading.Thread(target=worker, name=str(i), args=(s, pool))
     t.start()
