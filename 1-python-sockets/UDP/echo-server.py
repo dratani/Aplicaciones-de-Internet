@@ -1,6 +1,6 @@
 import socket
 
-HOST = "127.0.0.1"  # El hostname o IP del servidor
+HOST = "172.100.79.222"  # El hostname o IP del servidor
 PORT = 54321  # El puerto que usa el servidor
 bufferSize = 1024
 msgFromServer = "Hola cliente UDP"
@@ -16,7 +16,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as UDPServerSocket:
     bytesToSend = str.encode(msgFromServer)
     while (True):
         data, address = UDPServerSocket.recvfrom(bufferSize)
-
+        if not data:
+            break
         print("Mensaje del cliente:{}".format(data))
         print("Ip del cliente:{}".format(address))
 
