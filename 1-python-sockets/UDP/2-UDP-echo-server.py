@@ -16,10 +16,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as UDPServerSocket:
     bytesToSend = str.encode(msgFromServer)
     while (True):
         data, address = UDPServerSocket.recvfrom(bufferSize)
-        if not data:
-            break
+
         print("Mensaje del cliente:{}".format(data))
         print("Ip del cliente:{}".format(address))
-
+        if not data:
+            break
         # Enviando una respuesta al cliente
         UDPServerSocket.sendto(bytesToSend, address)

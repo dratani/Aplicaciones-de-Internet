@@ -15,3 +15,8 @@ with socket.socket(socket.AF_INET,socket.SOCK_DGRAM) as UDPClientSocket:
     msgFromServer = UDPClientSocket.recvfrom(bufferSize)
     print("Mensaje del servidor {}".format(msgFromServer[0]))
     UDPClientSocket.sendto(b'', serverAddressPort)
+
+
+
+
+    
