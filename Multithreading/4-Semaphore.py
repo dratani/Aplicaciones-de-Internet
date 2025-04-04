@@ -29,7 +29,7 @@ def worker(s, pool):
     logging.debug('Esperando para acceder al grupo ')
     with s:
         logging.debug("Adquirí el semáforo")
-        name = threading.currentThread().getName()
+        name = threading.current_thread().name
         pool.makeActive(name)
         time.sleep(0.1)
         pool.makeInactive(name)

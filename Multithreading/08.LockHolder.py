@@ -9,7 +9,7 @@ def lock_holder(lock):
         lock.acquire()
         try:
             logging.debug('Ocupado')
-            time.sleep(0.5)
+            time.sleep(5)
         finally:
             logging.debug('Disponible')
             lock.release()

@@ -15,7 +15,7 @@ def wait_for_event(e):
 
 def wait_for_event_timeout(e, t):
     """Wait t seconds and then timeout"""
-    while not e.isSet():
+    while not e.is_set():
         logging.debug('Esperando evento inicio a destiempo')
         event_is_set = e.wait(t)
         logging.debug('evento: %s', event_is_set)

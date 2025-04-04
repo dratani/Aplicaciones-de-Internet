@@ -15,7 +15,7 @@ def consumer(cond):
     logging.debug('Iniciando hilo consumidor')
     #t = threading.currentThread()
     with cond:
-        #sección critica
+        #sección critica (pop de lista)
         cond.wait()
         logging.debug('El recurso está disponible para el consumidor')
 
@@ -24,8 +24,9 @@ def producer(cond):
     """set up the resource to be used by the consumer"""
     logging.debug('Iniciando el hilo productor')
     with cond:
+        #sección crítica (add lista, incrementar)
         logging.debug('Poniendo los recursos disponibles')
-        cond.notifyAll()
+        cond.notify(2)
 
 
 condition = threading.Condition()

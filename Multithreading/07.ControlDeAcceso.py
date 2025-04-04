@@ -38,7 +38,7 @@ for i in range(2):
     t.start()
 
 logging.debug('Esperando hilos "workers"')
-main_thread = threading.currentThread()
+main_thread = threading.current_thread()
 for t in threading.enumerate():
     if t is not main_thread:
         t.join()

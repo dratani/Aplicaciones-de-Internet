@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG,
 def worker():
     global caracter
     logging.debug("Entré en la sección crítica")
-    caracter = threading.currentThread().name
+    caracter = threading.current_thread().name
     time.sleep(random.randint(1,5))
     logging.debug("valor de caracter - %s",caracter)
 

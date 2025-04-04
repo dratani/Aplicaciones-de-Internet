@@ -7,7 +7,6 @@ logging.basicConfig(level=logging.DEBUG,
 def worker(num):
     """hilo función trabajador"""
     print ('Trabajador', num)
-
     logging.debug("Función worker")
     return
 

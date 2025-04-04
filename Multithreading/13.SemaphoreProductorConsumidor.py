@@ -40,8 +40,10 @@ def consumidor (s,pool):
 pool = ActivePool()
 s = threading.Semaphore(0)
 for i in range(4):
-    c = threading.Thread(target=consumidor, name="s"+str(i), args=(s, pool))
+    c = threading.Thread(target=consumidor, name="c"+str(i), args=(s, pool))
     c.start()
 for i in range(2):
     p = threading.Thread(target=productor, name="p"+str(i), args=(s, pool))
     p.start()
+
+

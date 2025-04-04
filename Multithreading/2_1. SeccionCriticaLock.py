@@ -14,11 +14,11 @@ def worker(lock):
     lock.acquire()
     try:
         logging.debug("Entré en la sección crítica")
-        caracter = threading.currentThread().name
+        caracter = threading.current_thread().name
         time.sleep(random.randint(1, 5))
+        logging.debug("valor de caracter=" + caracter)
     finally:
         lock.release()
-        logging.debug("valor de caracter=" + caracter)
 
 
 lock = threading.Lock()
